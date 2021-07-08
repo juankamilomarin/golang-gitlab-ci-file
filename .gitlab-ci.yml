@@ -1,0 +1,26 @@
+image: golang:1.16
+
+.go-cache:
+    variables:
+        GOPATH: $CI_PROJECT_DIR/.go
+    before_script:
+        - mkdir -p .go
+    cache:
+        paths:
+        - .go/pkg/mod/
+
+stages:
+    - build
+    - test
+
+build:
+    stage: build
+    extends: .go-cache
+    script:
+        - go build ./...
+
+tests:unit:
+    stage: test
+    extends: .go-cache
+    script: 
+         - go test ./... -v short
